@@ -1,0 +1,6 @@
+.vscode/
+.venv
+build/
+output/
+docs/_build/
+docs/doxygen/xml/
