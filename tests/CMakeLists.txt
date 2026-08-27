@@ -1,0 +1,11 @@
+function(add_tecs_test test_name source_file)
+  add_executable(${test_name} ${source_file})
+  target_link_libraries(${test_name} PRIVATE TECS_core)
+  add_test(NAME ${test_name} COMMAND ${test_name})
+endfunction()
+
+add_tecs_test(test_vector test_vector.cpp)
+add_tecs_test(test_polarity test_polarity.cpp)
+# add_tecs_test(test_io test_io.cpp)
+# add_tecs_test(test_pair_finders test_pair_finders.cpp)
+# add_tecs_test(test_integrators test_integrators.cpp)
