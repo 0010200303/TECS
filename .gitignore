@@ -4,3 +4,5 @@ build/
 output/
 docs/_build/
 docs/doxygen/xml/
+
+__pycache__/
