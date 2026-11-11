@@ -2,6 +2,8 @@
 #define TECS_ARGPARSE_ARGUMENT_PARSER_HPP
 
 #include <cstdint>
+#include <any>
+#include <functional>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -155,8 +157,13 @@ namespace tecs {
 
       argparse::Argument& argument = parser.add_argument(short_name, long_name)
         .default_value(static_cast<T>(default_value))
-        .store_into(storage)
         .help(help);
+      storage = static_cast<T>(default_value);
+      argument.action(std::function<std::any(const std::string&)>(
+        [&storage](const std::string& value) -> std::any {
+          storage = value;
+          return storage;
+        }));
       if constexpr (sizeof...(choices) > 0)
         argument.choices(std::forward<V>(choices)...);
       
