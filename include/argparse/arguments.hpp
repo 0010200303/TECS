@@ -153,21 +153,21 @@ namespace tecs {
         return this->template add_argument<shape_for<T>::value, T, U>(
           short_name, long_name, storage, default_value, help, std::forward<V>(choices)...
         );
-      }
+      } else {
+        argparse::Argument& argument = parser.add_argument(short_name, long_name)
+          .default_value(static_cast<T>(default_value))
+          .help(help);
+        storage = static_cast<T>(default_value);
+        argument.action(std::function<std::any(const std::string&)>(
+          [&storage](const std::string& value) -> std::any {
+            storage = value;
+            return storage;
+          }));
+        if constexpr (sizeof...(choices) > 0)
+          argument.choices(std::forward<V>(choices)...);
 
-      argparse::Argument& argument = parser.add_argument(short_name, long_name)
-        .default_value(static_cast<T>(default_value))
-        .help(help);
-      storage = static_cast<T>(default_value);
-      argument.action(std::function<std::any(const std::string&)>(
-        [&storage](const std::string& value) -> std::any {
-          storage = value;
-          return storage;
-        }));
-      if constexpr (sizeof...(choices) > 0)
-        argument.choices(std::forward<V>(choices)...);
-      
-      return *this;
+        return *this;
+      }
     }
     
     /**
